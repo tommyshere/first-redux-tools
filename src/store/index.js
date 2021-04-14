@@ -1,25 +1,72 @@
-import { createStore } from "redux";
+import { createSlice, configureStore } from '@reduxjs/toolkit';
 
-const initState = {
+const initialState = {
   counter: 0,
+  showCounter: true,
 };
 
-const counterReducer = (state = initState, action) => {
-  if (action.type === "increment") {
-    return {
-      counter: state.counter + 1,
-    };
-  }
+// every slice needs:
+// name, initialState, reducers
+// redux toolkit makes it SEEM like we're manipulating the state
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState,
+  reducers: {
+    increment(state) {
+      state.counter++;
+    },
+    decrement(state) {
+      state.counter--;
+    },
+    increase(state, action) {
+      state.counter = state.counter + action.payload.amount;
+    },
+    toggleCounter(state) {
+      state.showCounter = !state.showCounter;
+    },
+  },
+});
 
-  if (action.type === "decrement") {
-    return {
-      counter: state.counter - 1,
-    };
-  }
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
 
-  return state;
-};
+export const counterActions = counterSlice.actions;
 
-const store = createStore(counterReducer);
+// #region reducer without toolkit
+// const counterReducer = (state = initialState, action) => {
+//   if (action.type === 'increment') {
+//     return {
+//       ...state,
+//       counter: state.counter + 1,
+//     };
+//   }
+
+//   if (action.type === 'increase') {
+//     return {
+//       ...state,
+//       counter: state.counter + action.amount,
+//     };
+//   }
+
+//   if (action.type === 'decrement') {
+//     return {
+//       ...state,
+//       counter: state.counter - 1,
+//     };
+//   }
+
+//   if (action.type === 'toggle') {
+//     return {
+//       ...state,
+//       showCounter: !state.showCounter,
+//     };
+//   }
+
+//   return state;
+// };
+
+// const store = createStore(counterReducer);
+//#endregion
 
 export default store;
