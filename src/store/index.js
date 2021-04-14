@@ -27,11 +27,29 @@ const counterSlice = createSlice({
   },
 });
 
+const initialAuthState = {
+  isAuth: false,
+};
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState: initialAuthState,
+  reducers: {
+    login(state) {
+      state.isAuth = true;
+    },
+    logout(state) {
+      state.isAuth = false;
+    },
+  },
+});
+
 const store = configureStore({
-  reducer: counterSlice.reducer,
+  reducer: { counter: counterSlice.reducer, auth: authSlice.reducer },
 });
 
 export const counterActions = counterSlice.actions;
+export const authActions = authSlice.actions;
 
 // #region reducer without toolkit
 // const counterReducer = (state = initialState, action) => {
